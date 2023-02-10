@@ -4,6 +4,7 @@ library(dittoSeq, lib.loc = "/Users/subhash/R/") #BiocManager::install("dittoSeq
 library(ggplot2, lib.loc = "/Users/subhash/R/") #BiocManager::install("ggplot2", lib="/Users/subhash/R", force=T)
 library(htmltools, lib.loc = "/Users/subhash/R/") 
 library(patchwork)
+#library(introdataviz, lib.loc = "/Users/subhash/R/") #geom_split_violin pre-packaged in this
 SeuObj <- readRDS("/Users/subhash/iCloud Drive (Archive)/Documents/Projects/shiny_app/dataset/rds/mouse_AA_CREB_final_CellTypes.Rds")
 
 #.libPaths( c("/Users/subhash/R", .libPaths()) )
@@ -12,7 +13,7 @@ SeuObj <- readRDS("/Users/subhash/iCloud Drive (Archive)/Documents/Projects/shin
 ui <- fluidPage(
   
   # App title ----
-  titlePanel("Split Violin Plots!"),
+  titlePanel("Split Violin/ Rain cloud Plots!"),
   
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -49,7 +50,7 @@ ui <- fluidPage(
         )
       ),
       checkboxGroupInput("samples",  label = "Select samples (max. 2)",
-                         unique(SeuObj@meta.data$Sample), selected = c("WT_control","CREB_KO_Control")
+                         unique(SeuObj@meta.data$Sample), selected = c(unique(SeuObj@meta.data$Sample)[1:2])
       )
     ),
     
@@ -67,7 +68,5 @@ ui <- fluidPage(
     )
   ),
  
-  
-   
-  
 )
+

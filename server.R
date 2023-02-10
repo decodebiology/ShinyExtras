@@ -26,8 +26,8 @@ server <- function(input, output) {
       
       # now nudge them apart
       #newdata$x <- ifelse(newdata$group %% 2 == 1,
-       #                   newdata$x - nudge,
-        #                  newdata$x + nudge)
+      #                   newdata$x - nudge,
+      #                  newdata$x + nudge)
       
       if (length(draw_quantiles) > 0 & !scales::zero_range(range(data$y))) {
         
@@ -57,7 +57,7 @@ server <- function(input, output) {
                                 stat = "ydensity",
                                 position = "identity",
                                 # nudge param here
-                                nudge = 0,
+                                #nudge = 0,
                                 ...,
                                 draw_quantiles = NULL,
                                 trim = TRUE,
@@ -76,7 +76,7 @@ server <- function(input, output) {
                    params = list(trim = trim,
                                  scale = scale,
                                  # don't forget the nudge
-                                 nudge = nudge,
+                                 #nudge = nudge,
                                  draw_quantiles = draw_quantiles,
                                  na.rm = na.rm,
                                  ...))
@@ -94,9 +94,14 @@ server <- function(input, output) {
     gE <- subset(gE,gE$Sample %in% c(samples))
     gE$Sample <- droplevels(factor(gE$Sample))
     gene <- gsub("-",".",gene)
-    p4 <- ggplot(gE, aes(Sample, gE[,gene], fill = Sample))+facet_wrap(~gE[,cell_group]) + ylab(paste0(gene," expression"))+  geom_split_violin(alpha = 0.7,nudge = 0)+scale_fill_manual(values=c(alpha("#424242",0.75), alpha("#B40431",0.75)))+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),panel.border = element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),panel.background = element_blank(),legend.position = "top",legend.key.size = unit(0.3, 'cm'),legend.key.height = unit(0.3, 'cm'),legend.key.width = unit(0.3, 'cm'),legend.title = element_text(size=10),legend.text = element_text(size=10)) + stat_summary(fun.y = median, geom='point', shape = 21, size = 3) + scale_x_discrete(name ="")+ scale_color_manual(values=c("black", "black")) 
+    p4 <- ggplot(gE, aes(factor(Sample), gE[,gene], fill = Sample))+facet_wrap(~gE[,cell_group]) + ylab(paste0(gene," expression"))+  geom_split_violin() +scale_fill_manual(values=c(alpha("#424242",0.75), alpha("#B40431",0.75)))+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),panel.border = element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),panel.background = element_blank(),legend.position = "top",legend.key.size = unit(0.3, 'cm'),legend.key.height = unit(0.3, 'cm'),legend.key.width = unit(0.3, 'cm'),legend.title = element_text(size=10),legend.text = element_text(size=10)) + stat_summary(fun.y = median, geom='point', shape = 21, size = 3) + scale_x_discrete(name ="")+ scale_color_manual(values=c("black", "black"))
+    #+ geom_boxplot(width = .2, alpha = .6, fatten = NULL, show.legend = FALSE)
+    design <- "
+  1##
+"
+    p4+plot_layout(design=design)
     
-    p4
+    
     
   })
     
