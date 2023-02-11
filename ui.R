@@ -80,21 +80,13 @@ ui <- fluidPage(
     # Main panel for displaying outputs ----
     mainPanel(
       
-      # Output: Histogram ----
-      #plotOutput(outputId = "distPlot"),
-      # Output: UMAP ----
-      #plotOutput(outputId = "umapPlot"),
-      # Output: Slitlot ----
-      #plotOutput(outputId = "splitPlot"),
-      # Output: Cell_type ----
       plotOutput(outputId = "ctPlot"),
       br(),
       br(),
       br(),
       br(),
       plotOutput(outputId = "dotplot"),
-      #textInput('filename', "Filename"),
-      #checkboxInput('savePlot', "Check to save")
+
    
     )
   ),

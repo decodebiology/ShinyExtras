@@ -100,23 +100,8 @@ server <- function(input, output) {
 
     print(p1)
     
-    
-    
   },alt="Please select appropriate parameters from leftpanel",res=72, width=500, height=500)
- # output$dotplot <- renderPlot({
-#    genes <- input$genelist
- #   ctype1 <- input$ctype
-  #  sample_list <- input$samples
-  #  glist <- c(strsplit(genes, ","))
-  #  SeuObj_subset <- SeuObj
-  #  Idents(SeuObj_subset) <- SeuObj_subset@meta.data$Sample
-  #  SeuObj_subset1 <- subset(SeuObj_subset, subset = Cell_type == ctype1)
-  #  p2 <- DotPlot(SeuObj_subset1, group.by="Sample", idents=c(sample_list),features=unique(unlist(glist)) )+coord_flip()+ggtitle(paste0(ctype1))+ scale_color_gradient2(low = "#4B088A", mid = "white",high = "#8A0829",midpoint = 0,name="Expression") + RotatedAxis()+ theme(axis.text.x=element_text(size=rel(1), angle=90, hjust = 1, vjust = 0.5), axis.text.y=element_text(size=rel(1), face="bold.italic") )
 
-   # p2+plot_layout()
-
-    
-  #})
   plotInput <- reactive({
     genes <- input$genelist
     ctype1 <- input$ctype
@@ -126,10 +111,7 @@ server <- function(input, output) {
     Idents(SeuObj_subset) <- SeuObj_subset@meta.data$Sample
     SeuObj_subset1 <- subset(SeuObj_subset, subset = Cell_type == ctype1)
     p2 <- DotPlot(SeuObj_subset1, group.by="Sample", idents=c(sample_list),features=unique(unlist(glist)) )+ggtitle(paste0(ctype1))+ scale_color_gradient2(low = "#4B088A", mid = "white",high = "#8A0829",midpoint = 0,name="Expression") + RotatedAxis()+ theme(axis.text.y=element_text(size=rel(1)), axis.text.x=element_text(size=rel(1), face="bold.italic", angle=90, hjust = 1, vjust = 0.5) )
-    #+coord_flip()
-    #p2
-    
-    
+
   })
   output$dotplot <- renderPlot({
     print(plotInput())
