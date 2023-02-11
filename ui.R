@@ -15,7 +15,7 @@ selected_markers <- "Ace2,Apob,Gda,Reg3g,Alpi,Car4,Ccl25,Pycard,Krt19,Gpx1,Lgr5,
 ui <- fluidPage(
   
   # App title ----
-  titlePanel("Split Violin/ Rain cloud Plots!"),
+  titlePanel("Split Violin/ Group  DotPlots!"),
   
   # Sidebar layout with input and output definitions ----
   sidebarLayout(
@@ -88,6 +88,10 @@ ui <- fluidPage(
       #plotOutput(outputId = "splitPlot"),
       # Output: Cell_type ----
       plotOutput(outputId = "ctPlot"),
+      br(),
+      br(),
+      br(),
+      br(),
       plotOutput(outputId = "dotplot"),
       #textInput('filename', "Filename"),
       #checkboxInput('savePlot', "Check to save")
