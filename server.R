@@ -94,16 +94,50 @@ server <- function(input, output) {
     gE <- subset(gE,gE$Sample %in% c(samples))
     gE$Sample <- droplevels(factor(gE$Sample))
     gene <- gsub("-",".",gene)
-    p4 <- ggplot(gE, aes(factor(Sample), gE[,gene], fill = Sample))+facet_wrap(~gE[,cell_group]) + ylab(paste0(gene," expression"))+  geom_split_violin() +scale_fill_manual(values=c(alpha("#424242",0.75), alpha("#B40431",0.75)))+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),panel.border = element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),panel.background = element_blank(),legend.position = "top",legend.key.size = unit(0.3, 'cm'),legend.key.height = unit(0.3, 'cm'),legend.key.width = unit(0.3, 'cm'),legend.title = element_text(size=10),legend.text = element_text(size=10)) + stat_summary(fun.y = median, geom='point', shape = 21, size = 3) + scale_x_discrete(name ="")+ scale_color_manual(values=c("black", "black"))
-    #+ geom_boxplot(width = .2, alpha = .6, fatten = NULL, show.legend = FALSE)
+    p1 <- ggplot(gE, aes(x="", gE[,gene], fill = Sample))+ scale_color_manual(values=c("black", "black"))+facet_wrap(~gE[,cell_group])+scale_fill_manual(values=c(alpha("#424242",0.4), alpha("#B40431",0.4))) + ylab(paste0(gene," expression"))+  introdataviz::geom_split_violin( alpha = .4, trim = FALSE, scale="width") + theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),panel.border = element_blank(), panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),panel.background = element_blank(),legend.position = "top",legend.key.size = unit(0.3, 'cm'),legend.key.height = unit(0.3, 'cm'),legend.key.width = unit(0.3, 'cm'),legend.title = element_text(size=10),legend.text = element_text(size=10)) + stat_summary(fun.y = median, geom='point', shape = 21, size = 3) + scale_x_discrete(name ="")
+    #
+    #+scale_fill_brewer(palette = "Dark2")+ geom_boxplot(width = .2, alpha = .6, fatten = NULL, show.legend = FALSE)
     design <- "
   1##
+  1##
+  1##
 "
-    p4+plot_layout(design=design)
+    p1+plot_layout(design=design)
     
     
     
   })
+ # output$dotplot <- renderPlot({
+#    genes <- input$genelist
+ #   ctype1 <- input$ctype
+  #  sample_list <- input$samples
+  #  glist <- c(strsplit(genes, ","))
+  #  SeuObj_subset <- SeuObj
+  #  Idents(SeuObj_subset) <- SeuObj_subset@meta.data$Sample
+  #  SeuObj_subset1 <- subset(SeuObj_subset, subset = Cell_type == ctype1)
+  #  p2 <- DotPlot(SeuObj_subset1, group.by="Sample", idents=c(sample_list),features=unique(unlist(glist)) )+coord_flip()+ggtitle(paste0(ctype1))+ scale_color_gradient2(low = "#4B088A", mid = "white",high = "#8A0829",midpoint = 0,name="Expression") + RotatedAxis()+ theme(axis.text.x=element_text(size=rel(1), angle=90, hjust = 1, vjust = 0.5), axis.text.y=element_text(size=rel(1), face="bold.italic") )
+
+   # p2+plot_layout()
+
     
+  #})
+  plotInput <- reactive({
+    genes <- input$genelist
+    ctype1 <- input$ctype
+    sample_list <- input$samples
+    glist <- c(strsplit(genes, ","))
+    SeuObj_subset <- SeuObj
+    Idents(SeuObj_subset) <- SeuObj_subset@meta.data$Sample
+    SeuObj_subset1 <- subset(SeuObj_subset, subset = Cell_type == ctype1)
+    p2 <- DotPlot(SeuObj_subset1, group.by="Sample", idents=c(sample_list),features=unique(unlist(glist)) )+coord_flip()+ggtitle(paste0(ctype1))+ scale_color_gradient2(low = "#4B088A", mid = "white",high = "#8A0829",midpoint = 0,name="Expression") + RotatedAxis()+ theme(axis.text.x=element_text(size=rel(1), angle=90, hjust = 1, vjust = 0.5), axis.text.y=element_text(size=rel(1), face="bold.italic") )
+
+    #p2
+    
+    
+  })
+  output$dotplot <- renderPlot({
+    print(plotInput())
+  })
   
+ 
 }

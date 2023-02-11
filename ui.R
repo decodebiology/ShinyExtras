@@ -4,8 +4,10 @@ library(dittoSeq, lib.loc = "/Users/subhash/R/") #BiocManager::install("dittoSeq
 library(ggplot2, lib.loc = "/Users/subhash/R/") #BiocManager::install("ggplot2", lib="/Users/subhash/R", force=T)
 library(htmltools, lib.loc = "/Users/subhash/R/") 
 library(patchwork)
-#library(introdataviz, lib.loc = "/Users/subhash/R/") #geom_split_violin pre-packaged in this
+#library("Signac", lib.loc = "/Users/subhash/R")
+library(introdataviz, lib.loc = "/Users/subhash/R/") #geom_split_violin pre-packaged in this
 SeuObj <- readRDS("/Users/subhash/iCloud Drive (Archive)/Documents/Projects/shiny_app/dataset/rds/mouse_AA_CREB_final_CellTypes.Rds")
+selected_markers <- "Ace2,Apob,Gda,Reg3g,Alpi,Car4,Ccl25,Pycard,Krt19,Gpx1,Lgr5,Olfm4,Slc12a2,Ascl2,Ly6a,S100a6,Fcgbp,Agr2,Clca1,Muc2,Spink4,Pcna,Mki67,Ube2c,Cenpm,Tk1,Ube2t,Tacc3,Neurod1,Chga,Chgb,Cck,Gip,Hck,Lrmp,Sh2d6,Cd24a,Klre1,Klrd1,Lag3,Trdc,Gzmk,Cd8a,Tcf7,Cd8a,Gzmk,Trdc,Cd79a,Ms4a1,Cd79b,Ighkc,Alpi,AY036118,Lars2"
 
 #.libPaths( c("/Users/subhash/R", .libPaths()) )
 
@@ -51,7 +53,28 @@ ui <- fluidPage(
       ),
       checkboxGroupInput("samples",  label = "Select samples (max. 2)",
                          unique(SeuObj@meta.data$Sample), selected = c(unique(SeuObj@meta.data$Sample)[1:2])
-      )
+      ),
+      textAreaInput(
+        inputId = "genelist",
+        label = "Gene list(comma separated)",
+        value = selected_markers,
+        placeholder = "List of genes",
+        resize = "vertical"
+      ),
+      selectizeInput(
+        inputId = "ctype", 
+        selected = "Enterocyte",
+        label = "Input cell type name",
+        multiple = FALSE,
+        choices = c("ctype" = "",levels(SeuObj@meta.data$Cell_type)),
+        options = list(
+          create = TRUE,
+          placeholder = "Enterocyte",
+          maxItems = '1'
+          #onDropdownOpen = I("function($dropdown) {if (!this.lastQuery.length) {this.close(); this.settings.openOnFocus = false;}}"),
+          #onType = I("function (str) {if (str === \"\") {this.close();}}")
+        )
+      ),
     ),
     
     # Main panel for displaying outputs ----
@@ -64,7 +87,11 @@ ui <- fluidPage(
       # Output: Slitlot ----
       #plotOutput(outputId = "splitPlot"),
       # Output: Cell_type ----
-      plotOutput(outputId = "ctPlot")
+      plotOutput(outputId = "ctPlot"),
+      plotOutput(outputId = "dotplot"),
+      #textInput('filename', "Filename"),
+      #checkboxInput('savePlot', "Check to save")
+   
     )
   ),
  
